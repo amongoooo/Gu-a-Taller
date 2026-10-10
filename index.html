@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guía del Taller de Tesis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: la misma hoja de cuaderno que la agenda del facilitador, pensada primero para celular.
+   Cabecera breve, barra fija de apartados con scroll horizontal, nueve apartados en el orden del taller.
+   Tinta azul para buscar y leer (1–4), pluma roja para escribir, citar e IA (5–9). Oscuro: pizarrón. */
+:root{
+  --paper:#f8fafd;
+  --grid:rgba(52,92,170,.085);
+  --ink:#18213b;
+  --ink-soft:#56607a;
+  --line:#d3dbea;
+  --card:#ffffff;
+  --blue:#2546b2;
+  --red:#c23a2e;
+  --blue-wash:#e9eefb;
+  --red-wash:#fbece9;
+  --on-accent:#ffffff;
+  --code-bg:#eef2f9;
+  --go:#2b7a4b; --wait:#a87908; --stop:#c23a2e;
+  --go-wash:#e5f2e9; --wait-wash:#faf1d8; --stop-wash:#fbe7e4;
+  --font-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --font-body:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#16231e; --grid:rgba(230,240,232,.045); --ink:#ecf0e8; --ink-soft:#a6b4ac;
+    --line:#33463e; --card:#1d2d27; --blue:#9fbaff; --red:#ff9e90;
+    --blue-wash:#1f3142; --red-wash:#3a2925; --on-accent:#10201a; --code-bg:#22342d;
+    --go:#80d49f; --wait:#efcb62; --stop:#ff9e90; --go-wash:#1d3a29; --wait-wash:#38321d; --stop-wash:#3b2724;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#16231e; --grid:rgba(230,240,232,.045); --ink:#ecf0e8; --ink-soft:#a6b4ac;
+  --line:#33463e; --card:#1d2d27; --blue:#9fbaff; --red:#ff9e90;
+  --blue-wash:#1f3142; --red-wash:#3a2925; --on-accent:#10201a; --code-bg:#22342d;
+  --go:#80d49f; --wait:#efcb62; --stop:#ff9e90; --go-wash:#1d3a29; --wait-wash:#38321d; --stop-wash:#3b2724;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+  color:var(--ink);font-family:var(--font-body);font-size:1.0625rem;line-height:1.6;
+  padding-inline:clamp(16px,4vw,40px);padding-block:0 3rem;
+}
+.wrap{max-width:46rem;margin-inline:auto}
+a{color:var(--blue);text-underline-offset:2px}
+h1,h2,h3{font-family:var(--font-display);line-height:1.15;text-wrap:balance;margin:0;letter-spacing:-.01em}
+p{margin:0}
+ul,ol{margin:0}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:3px}
+button,input,textarea{font:inherit;color:inherit}
+.eyebrow{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.mono{font-family:var(--font-mono)}
+
+.hero{padding-block:2rem 1.25rem;display:grid;gap:.75rem}
+.hero h1{font-size:clamp(2rem,7vw,3rem);font-weight:800}
+.lede{font-size:1.1rem}
+.rule{display:flex;gap:.6rem;align-items:flex-start;padding:.75rem .9rem;border:1px solid var(--line);border-left:4px solid var(--red);border-radius:4px;background:var(--card);font-size:.95rem}
+.rule b{color:var(--red)}
+
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--line);margin-inline:calc(-1 * clamp(16px,4vw,40px));padding:.55rem clamp(16px,4vw,40px)}
+.nav-in{display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none;max-width:46rem;margin-inline:auto}
+.nav-in::-webkit-scrollbar{display:none}
+.nav a{flex:none;text-decoration:none;font-size:.85rem;padding:.3rem .7rem;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);white-space:nowrap}
+.nav a .n{font-family:var(--font-mono);color:var(--tone);margin-right:.3rem}
+.nav a:hover{border-color:var(--tone)}
+
+.t-blue{--tone:var(--blue);--wash:var(--blue-wash)}
+.t-red{--tone:var(--red);--wash:var(--red-wash)}
+
+main{display:grid;gap:3rem;margin-top:2rem}
+.sec{display:grid;gap:1rem;scroll-margin-top:4rem}
+.sec-head{display:grid;grid-template-columns:auto 1fr;gap:.1rem .8rem;align-items:baseline;padding-bottom:.6rem;border-bottom:2px solid var(--tone)}
+.sec-num{grid-row:span 2;font-family:var(--font-display);font-weight:800;font-size:2.4rem;line-height:1;color:var(--tone)}
+.sec-head h2{font-size:clamp(1.4rem,5vw,1.8rem);font-weight:700}
+.sec-head p{color:var(--ink-soft);font-size:.95rem}
+.sub{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-top:.4rem}
+
+/* Enlaces */
+.layer{display:grid;gap:.5rem}
+.layer h3{font-size:1.05rem;display:flex;flex-wrap:wrap;gap:.2rem .6rem;align-items:baseline}
+.layer h3 span{font-family:var(--font-body);font-weight:400;font-size:.9rem;color:var(--ink-soft)}
+.links{list-style:none;padding:0;display:grid;gap:.4rem}
+.links li{min-width:0}
+.links a,.links .nolink{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.1rem .75rem;align-items:center;padding:.6rem .8rem;background:var(--card);border:1px solid var(--line);border-radius:4px;text-decoration:none;color:var(--ink)}
+.links a:hover{border-color:var(--tone)}
+.links strong{font-weight:700}
+.links .what{grid-column:1;font-size:.88rem;color:var(--ink-soft);line-height:1.4}
+.links .dom{grid-column:2;grid-row:1 / span 2;font-family:var(--font-mono);font-size:.75rem;color:var(--tone);text-align:right;overflow-wrap:anywhere;max-width:11rem}
+.links .nolink{border-style:dashed}
+@media (max-width:480px){ .links .dom{display:none} }
+
+/* Bloques genéricos */
+.box{padding:1rem;background:var(--card);border:1px solid var(--line);border-radius:4px;display:grid;gap:.75rem;min-width:0}
+.bul{padding-left:1.2rem;display:grid;gap:.4rem}
+.steps{list-style:none;counter-reset:st;padding:0;display:grid;gap:.75rem}
+.steps li{counter-increment:st;display:grid;grid-template-columns:1.9rem minmax(0,1fr);gap:.6rem}
+.steps li::before{content:counter(st);font-family:var(--font-mono);font-size:.85rem;width:1.7rem;height:1.7rem;display:grid;place-items:center;border-radius:50%;background:var(--wash);color:var(--tone)}
+.say{border-left:3px solid var(--tone);padding:.5rem .9rem;background:var(--wash);border-radius:0 4px 4px 0;font-style:italic}
+code{font-family:var(--font-mono);font-size:.88em;background:var(--code-bg);padding:.08rem .3rem;border-radius:3px;overflow-wrap:anywhere}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;vertical-align:top;padding:.55rem .75rem;border-bottom:1px solid var(--line)}
+th{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:500;background:var(--code-bg)}
+tr:last-child td{border-bottom:0}
+td code{white-space:nowrap}
+.note{font-size:.92rem;color:var(--ink-soft)}
+
+/* Herramientas interactivas */
+.tool{padding:1rem;border:1px solid var(--tone);border-radius:6px;background:var(--card);display:grid;gap:.8rem}
+.tool h3{font-size:1.1rem}
+.field{display:grid;gap:.25rem}
+.field label{font-weight:700;font-size:.92rem}
+.field small{color:var(--ink-soft);font-size:.82rem}
+.field input,.field textarea{width:100%;padding:.5rem .6rem;border:1px solid var(--line);border-radius:4px;background:var(--paper);font-size:1rem}
+.field textarea{resize:vertical;min-height:2.6rem}
+.out{border:1px solid var(--line);border-radius:4px;background:var(--code-bg);overflow:hidden}
+.out-head{display:flex;justify-content:space-between;align-items:center;gap:.5rem;padding:.35rem .5rem .35rem .75rem;border-bottom:1px solid var(--line)}
+.out-head span{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft)}
+.out pre{margin:0;padding:.75rem;font-family:var(--font-mono);font-size:.88rem;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.copy{background:var(--tone);color:var(--on-accent);border:0;border-radius:4px;padding:.3rem .75rem;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.btn-quiet{background:none;border:1px solid var(--line);border-radius:4px;padding:.3rem .7rem;font-size:.85rem;cursor:pointer}
+.btn-quiet:hover{border-color:var(--tone);color:var(--tone)}
+.checks{list-style:none;padding:0;display:grid;gap:.35rem}
+.checks li{display:flex;gap:.55rem;align-items:flex-start}
+.checks .mark{flex:none;width:1.25rem;height:1.25rem;border-radius:3px;display:grid;place-items:center;font-size:.8rem;font-weight:700;margin-top:.15rem;border:1px solid var(--line)}
+.checks .ok .mark{background:var(--go);border-color:var(--go);color:var(--on-accent)}
+.checks .no .mark{background:var(--paper)}
+.checks label{display:flex;gap:.55rem;align-items:flex-start;cursor:pointer}
+.checks input{width:1.15rem;height:1.15rem;margin-top:.2rem;accent-color:var(--tone);flex:none}
+
+.prompts{display:grid;gap:.6rem}
+.prompts details{border:1px solid var(--line);border-radius:4px;background:var(--card)}
+.prompts summary{cursor:pointer;padding:.65rem .9rem;font-weight:700;list-style:none;display:flex;gap:.6rem;align-items:baseline}
+.prompts summary::-webkit-details-marker{display:none}
+.prompts summary::before{content:"+";font-family:var(--font-mono);color:var(--tone);width:.8rem;flex:none}
+.prompts details[open] summary::before{content:"−"}
+.prompts .pbody{padding:0 .9rem .9rem;display:grid;gap:.5rem}
+
+.sem{display:grid;gap:.5rem}
+.sem div{display:grid;grid-template-columns:6.5rem minmax(0,1fr);gap:.75rem;padding:.7rem .85rem;border-radius:4px}
+.sem .g{background:var(--go-wash)}.sem .y{background:var(--wait-wash)}.sem .r{background:var(--stop-wash)}
+.sem strong{display:flex;align-items:center;gap:.45rem}
+.sem strong::before{content:"";width:.8rem;height:.8rem;border-radius:50%;flex:none}
+.sem .g strong{color:var(--go)}.sem .g strong::before{background:var(--go)}
+.sem .y strong{color:var(--wait)}.sem .y strong::before{background:var(--wait)}
+.sem .r strong{color:var(--stop)}.sem .r strong::before{background:var(--stop)}
+@media (max-width:480px){ .sem div{grid-template-columns:1fr;gap:.2rem} }
+
+.cols2{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.75rem}
+.plan-row{display:grid;grid-template-columns:9.5rem minmax(0,1fr);gap:.5rem;align-items:end}
+@media (max-width:480px){ .plan-row{grid-template-columns:1fr} }
+.saved{font-size:.85rem;color:var(--ink-soft);min-height:1.2em}
+.foot{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.9rem;color:var(--ink-soft);display:grid;gap:.4rem}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">Taller de Tesis · Fuentes, escritura e IA · 10 oct 2026</p>
+    <h1>Guía de recursos</h1>
+    <p class="lede">Encontrar bien, leer con criterio, escribir con voz propia y usar la IA como asistente, no como autor.</p>
+    <p class="rule"><span><b>Regla de oro:</b> a la IA solo le llegan datos anonimizados. Nunca pegues nombres de alumnos, de la escuela ni fotos con rostro.</span></p>
+  </header>
+</div>
+
+<nav class="nav" aria-label="Apartados">
+  <div class="nav-in">
+    <a class="t-blue" href="#donde"><span class="n">1</span>Dónde buscar</a>
+    <a class="t-blue" href="#cadena"><span class="n">2</span>Cómo buscar</a>
+    <a class="t-blue" href="#confiable"><span class="n">3</span>¿Es confiable?</a>
+    <a class="t-blue" href="#matriz"><span class="n">4</span>Guardar y leer</a>
+    <a class="t-red" href="#escribir"><span class="n">5</span>Escribir</a>
+    <a class="t-red" href="#apa"><span class="n">6</span>APA 7</a>
+    <a class="t-red" href="#etica"><span class="n">7</span>Ética e IA</a>
+    <a class="t-red" href="#prompts"><span class="n">8</span>Prompts</a>
+    <a class="t-red" href="#pasos"><span class="n">9</span>Mis pasos</a>
+  </div>
+</nav>
+
+<div class="wrap">
+<main>
+
+<!-- 1 -->
+<section class="sec t-blue" id="donde" aria-labelledby="h1s">
+  <header class="sec-head"><span class="sec-num">1</span><h2 id="h1s">Dónde buscar</h2><p>Cada capa sirve para algo distinto. Una buena tesis combina tres voces: la investigación, la norma y lo que viviste en tu práctica.</p></header>
+
+  <div class="layer">
+    <h3>Puerta de entrada <span>búsqueda amplia, «Citado por» y artículos relacionados</span></h3>
+    <ul class="links">
+      <li><a href="https://scholar.google.com" target="_blank" rel="noopener"><strong>Google Académico</strong><span class="what">Usa «Citado por» para encontrar estudios más nuevos y la estrella para guardar en «Mi biblioteca».</span><span class="dom">scholar.google.com</span></a></li>
+      <li><a href="https://www.semanticscholar.org" target="_blank" rel="noopener"><strong>Semantic Scholar</strong><span class="what">Buscador académico con artículos relacionados.</span><span class="dom">semanticscholar.org</span></a></li>
+    </ul>
+  </div>
+
+  <div class="layer">
+    <h3>Artículos latinoamericanos en acceso abierto <span>el grueso de tu marco teórico, en español</span></h3>
+    <ul class="links">
+      <li><a href="https://www.redalyc.org" target="_blank" rel="noopener"><strong>Redalyc</strong><span class="what">Revistas científicas de Iberoamérica.</span><span class="dom">redalyc.org</span></a></li>
+      <li><a href="https://www.scielo.org.mx" target="_blank" rel="noopener"><strong>SciELO México</strong><span class="what">Revistas mexicanas arbitradas.</span><span class="dom">scielo.org.mx</span></a></li>
+      <li><a href="https://dialnet.unirioja.es" target="_blank" rel="noopener"><strong>Dialnet</strong><span class="what">Artículos y libros en español.</span><span class="dom">dialnet.unirioja.es</span></a></li>
+      <li><a href="https://doaj.org" target="_blank" rel="noopener"><strong>DOAJ</strong><span class="what">Directorio de revistas de acceso abierto. También sirve para verificar una revista.</span><span class="dom">doaj.org</span></a></li>
+    </ul>
+  </div>
+
+  <div class="layer">
+    <h3>Investigación educativa mexicana y normalista <span>antecedentes cercanos a tu contexto</span></h3>
+    <ul class="links">
+      <li><a href="https://www.comie.org.mx" target="_blank" rel="noopener"><strong>COMIE</strong><span class="what">Revista Mexicana de Investigación Educativa y memorias del Congreso Nacional de Investigación Educativa.</span><span class="dom">comie.org.mx</span></a></li>
+      <li><a href="https://www.iisue.unam.mx/iresie/" target="_blank" rel="noopener"><strong>IRESIE</strong><span class="what">Base de datos de educación iberoamericana del IISUE de la UNAM.</span><span class="dom">iisue.unam.mx/iresie</span></a></li>
+      <li><a href="https://perfileseducativos.unam.mx" target="_blank" rel="noopener"><strong>Perfiles Educativos</strong><span class="what">Revista de investigación educativa de la UNAM.</span><span class="dom">perfileseducativos.unam.mx</span></a></li>
+      <li><a href="https://redie.uabc.mx" target="_blank" rel="noopener"><strong>REDIE</strong><span class="what">Revista Electrónica de Investigación Educativa.</span><span class="dom">redie.uabc.mx</span></a></li>
+      <li><a href="https://sinectica.iteso.mx" target="_blank" rel="noopener"><strong>Sinéctica</strong><span class="what">Revista de educación del ITESO.</span><span class="dom">sinectica.iteso.mx</span></a></li>
+      <li><span class="nolink"><strong>Memorias del CONISEN</strong><span class="what">Investigaciones hechas en escuelas normales y de práctica. Búscalas como «memorias CONISEN» o pregunta en la biblioteca de tu Normal.</span></span></li>
+      <li><span class="nolink"><strong>Repositorio de tu Normal</strong><span class="what">Documentos de titulación de tu escuela. Sirven como antecedente y como modelo de estructura.</span></span></li>
+    </ul>
+  </div>
+
+  <div class="layer">
+    <h3>Internacional en inglés <span>para ampliar antecedentes</span></h3>
+    <ul class="links">
+      <li><a href="https://eric.ed.gov" target="_blank" rel="noopener"><strong>ERIC</strong><span class="what">Investigación educativa en inglés. Desde 2025 indexa menos revistas.</span><span class="dom">eric.ed.gov</span></a></li>
+      <li><span class="nolink"><strong>Scopus y Web of Science</strong><span class="what">De pago. Pregunta en la biblioteca de tu Normal si tiene acceso por CONRICYT.</span></span></li>
+    </ul>
+  </div>
+
+  <div class="layer">
+    <h3>Documentos oficiales y datos <span>marco normativo y contexto</span></h3>
+    <ul class="links">
+      <li><a href="https://dgesum.sep.gob.mx/storage/recursos/planes2022/YLWxm8QNYy-Orientaciones-academicas-tit.pdf" target="_blank" rel="noopener"><strong>Orientaciones para el trabajo de titulación, Planes 2022</strong><span class="what">Documento de la DGESuM de la SEP (PDF).</span><span class="dom">dgesum.sep.gob.mx</span></a></li>
+      <li><a href="https://unesdoc.unesco.org" target="_blank" rel="noopener"><strong>UNESDOC</strong><span class="what">Biblioteca digital de la UNESCO.</span><span class="dom">unesdoc.unesco.org</span></a></li>
+      <li><span class="nolink"><strong>También</strong><span class="what">SEP, OCDE, OEI e INEGI para datos y contexto.</span></span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="sec t-blue" id="cadena" aria-labelledby="h2s">
+  <header class="sec-head"><span class="sec-num">2</span><h2 id="h2s">Cómo buscar</h2><p>Una cadena de búsqueda se puede repetir, ajustar y explicar en tu metodología.</p></header>
+  <ol class="steps">
+    <li><span><b>Conceptos clave.</b> Saca 2 o 3 de tu pregunta.</span></li>
+    <li><span><b>Sinónimos y traducción.</b> Busca el término «oficial» y su equivalente en inglés en el <a href="https://vocabularies.unesco.org/browser/thesaurus/es/" target="_blank" rel="noopener">Tesauro de la UNESCO</a>.</span></li>
+    <li><span><b>Arma la cadena.</b> Sinónimos con OR dentro de paréntesis; conceptos distintos con AND.</span></li>
+    <li><span><b>Pruébala en varios lugares.</b> Redalyc, Google Académico y, en inglés, ERIC.</span></li>
+    <li><span><b>Filtra.</b> Últimos 10 años y solo artículos.</span></li>
+    <li><span><b>Bola de nieve.</b> Abre el mejor artículo, revisa sus referencias y su «Citado por». <a href="https://www.connectedpapers.com" target="_blank" rel="noopener">Connected Papers</a> te muestra un mapa de artículos conectados.</span></li>
+  </ol>
+
+  <div class="tool" id="tool-cadena">
+    <h3>Arma tu cadena</h3>
+    <p class="note">Escribe los sinónimos de cada concepto separados por comas. Viene llena con un ejemplo; cámbiala por tu pregunta.</p>
+    <div class="field"><label for="c1">Concepto 1</label><input id="c1" value="mediación escolar, mediación entre pares"></div>
+    <div class="field"><label for="c2">Concepto 2</label><input id="c2" value="conflicto*"></div>
+    <div class="field"><label for="c3">Concepto 3</label><input id="c3" value="primaria, educación básica"></div>
+    <div class="out"><div class="out-head"><span>Tu cadena</span><button type="button" class="copy" data-copy="cadena-out">Copiar</button></div><pre id="cadena-out"></pre></div>
+    <p class="note">Si no da resultados, quita un concepto o usa palabras más generales. No todos los buscadores aceptan todos los operadores.</p>
+  </div>
+
+  <p class="sub">Operadores</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Operador</th><th>Qué hace</th><th>Ejemplo</th></tr></thead>
+    <tbody>
+      <tr><td><code>" "</code></td><td>Frase exacta</td><td><code>"comprensión lectora"</code></td></tr>
+      <tr><td><code>AND</code></td><td>Ambos términos</td><td><code>lectura AND preescolar</code></td></tr>
+      <tr><td><code>OR</code></td><td>Cualquiera de los dos (sinónimos)</td><td><code>docente OR maestro</code></td></tr>
+      <tr><td><code>-</code> o <code>NOT</code></td><td>Excluye un término</td><td><code>lectura -universidad</code></td></tr>
+      <tr><td><code>*</code></td><td>Variantes de una palabra</td><td><code>conflict*</code></td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Guarda tu cadena y la fecha en que la usaste: te sirve para explicar en la metodología cómo buscaste.</p>
+</section>
+
+<!-- 3 -->
+<section class="sec t-blue" id="confiable" aria-labelledby="h3s">
+  <header class="sec-head"><span class="sec-num">3</span><h2 id="h3s">¿Es confiable?</h2><p>Revisa cada fuente en dos niveles: el documento y la revista donde salió.</p></header>
+  <div class="cols2">
+    <div class="box">
+      <p class="sub" style="margin:0">El documento</p>
+      <ul class="checks">
+        <li><label><input type="checkbox">¿Quién lo escribe y desde qué institución?</label></li>
+        <li><label><input type="checkbox">¿De qué año es?</label></li>
+        <li><label><input type="checkbox">¿Es investigación u opinión?</label></li>
+        <li><label><input type="checkbox">¿Explica su método y su muestra?</label></li>
+        <li><label><input type="checkbox">¿Tiene referencias?</label></li>
+      </ul>
+    </div>
+    <div class="box">
+      <p class="sub" style="margin:0">La revista</p>
+      <ul class="checks">
+        <li><label><input type="checkbox">¿Está en el Catálogo 2.0 de <a href="https://www.latindex.org" target="_blank" rel="noopener">Latindex</a>? (no basta el Directorio)</label></li>
+        <li><label><input type="checkbox">¿O en SciELO, Redalyc, DOAJ o Scopus?</label></li>
+        <li><label><input type="checkbox">¿Aparece en <a href="https://www.scimagojr.com" target="_blank" rel="noopener">SCImago</a>? Ahí ves su cuartil.</label></li>
+      </ul>
+      <p class="note"><b>Señales de revista depredadora:</b> cobran por publicar rápido, prometen publicación en días y mandan invitaciones masivas por correo.</p>
+    </div>
+  </div>
+  <p class="sub">Qué peso tiene cada tipo de fuente</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Tipo</th><th>Úsalo como</th></tr></thead>
+    <tbody>
+      <tr><td>Artículo arbitrado</td><td>Sustento principal</td></tr>
+      <tr><td>Libro académico</td><td>Sustento principal, sobre todo para teoría</td></tr>
+      <tr><td>Tesis de posgrado</td><td>Apoyo y antecedentes</td></tr>
+      <tr><td>Memoria de congreso</td><td>Apoyo y antecedentes cercanos</td></tr>
+      <tr><td>Tesis de licenciatura</td><td>Modelo de estructura, no sustento principal</td></tr>
+      <tr><td>Blogs, monografías, sitios de tareas</td><td>No cuentan</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 4 -->
+<section class="sec t-blue" id="matriz" aria-labelledby="h4s">
+  <header class="sec-head"><span class="sec-num">4</span><h2 id="h4s">Guardar y leer</h2><p>Una fila por fuente, el mismo día que la lees. Tu marco teórico se escribe a partir de la última columna.</p></header>
+  <ul class="links">
+    <li><a href="https://www.zotero.org" target="_blank" rel="noopener"><strong>Zotero</strong><span class="what">Gratuito. Guarda fuentes con el conector del navegador y genera la referencia en APA 7. Siempre revísala: falla con mayúsculas, DOI y autores institucionales.</span><span class="dom">zotero.org</span></a></li>
+    <li><span class="nolink"><strong>Sin laptop</strong><span class="what">En Google Académico, la estrella guarda el artículo en «Mi biblioteca» y el botón «Citar» te da la referencia en APA. También se revisa.</span></span></li>
+  </ul>
+  <p class="sub">Matriz de lectura</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Fuente (APA)</th><th>Tipo y método</th><th>Idea clave en mis palabras</th><th>Cita útil (con página)</th><th>Relación con mi pregunta</th></tr></thead>
+    <tbody>
+      <tr><td>Pérez, A. y López, B. (2020). [ejemplo]</td><td>Estudio con dos grupos de 3º, antes y después</td><td>Leer en voz alta a diario mejoró las respuestas inferenciales</td><td>«…» (p. 15)</td><td>Respalda mi intervención; su muestra es urbana y la mía no</td></tr>
+    </tbody>
+  </table></div>
+  <div class="out"><div class="out-head"><span>Encabezados para tu hoja de cálculo</span><button type="button" class="copy" data-copy="matriz-head">Copiar</button></div><pre id="matriz-head">Fuente (APA)	Tipo y método	Idea clave en mis palabras	Cita útil (con página)	Relación con mi pregunta</pre></div>
+  <p class="note">La fila de ejemplo es ficticia. La matriz puede vivir en una hoja de cálculo, en Word o en tu cuaderno; lo que importa son las cinco columnas.</p>
+</section>
+
+<!-- 5 -->
+<section class="sec t-red" id="escribir" aria-labelledby="h5s">
+  <header class="sec-head"><span class="sec-num">5</span><h2 id="h5s">Escribir con tus fuentes</h2><p>El sínodo busca tu interpretación y la conexión con tu práctica, no una lista de lo que dijeron otros.</p></header>
+  <ol class="steps">
+    <li><span><b>Afirmación.</b> Lo que sostienes, en una oración.</span></li>
+    <li><span><b>Evidencia de dos fuentes.</b> Qué dicen los autores que la respaldan o la matizan.</span></li>
+    <li><span><b>Interpretación propia.</b> Qué significa eso, dicho por ti.</span></li>
+    <li><span><b>Conexión con tu práctica.</b> Qué viste en tu grupo que se relaciona.</span></li>
+  </ol>
+  <div class="out"><div class="out-head"><span>Plantilla de síntesis</span><button type="button" class="copy" data-copy="plantilla">Copiar</button></div><pre id="plantilla">Tanto X (2019) como Y (2022) coinciden en…, aunque Z (2021) advierte que…</pre></div>
+  <p class="note">Prueba rápida: subraya en tu párrafo la oración donde tú interpretas. Si no hay ninguna, todavía es un párrafo collage. Y empieza a escribir por lo que ya viviste (diagnóstico, metodología), no por la introducción.</p>
+</section>
+
+<!-- 6 -->
+<section class="sec t-red" id="apa" aria-labelledby="h6s">
+  <header class="sec-head"><span class="sec-num">6</span><h2 id="h6s">Citar en APA 7</h2><p>Cita en el momento en que escribes, no al final: así no pierdes la página de una cita textual.</p></header>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Caso</th><th>Forma correcta</th></tr></thead>
+    <tbody>
+      <tr><td>Un autor</td><td>(Latorre, 2005)</td></tr>
+      <tr><td>Dos autores</td><td>(Pérez y López, 2020)</td></tr>
+      <tr><td>Tres o más</td><td>(García et al., 2021), desde la primera cita</td></tr>
+      <tr><td>Autor institucional</td><td>Primera vez: (Secretaría de Educación Pública [SEP], 2022); después: (SEP, 2022)</td></tr>
+      <tr><td>Cita textual</td><td>Entre comillas y con página: (Autor, año, p. 15). Si pasa de 40 palabras, va en bloque y sin comillas.</td></tr>
+      <tr><td>Cita de cita</td><td>Evítala. Si no hay remedio: (Vygotsky, 1978, como se citó en Pérez, 2020), y solo Pérez va en las referencias.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box">
+    <p class="sub" style="margin:0">Referencia de un artículo</p>
+    <p><code>Apellido, A. A. y Apellido, B. B. (Año). Título del artículo. Nombre de la Revista, volumen(número), páginas. https://doi.org/...</code></p>
+  </div>
+  <div class="box">
+    <p class="sub" style="margin:0">Esto también es plagio</p>
+    <ul class="bul">
+      <li>Copiar sin comillas.</li>
+      <li>Parafrasear cambiando dos palabras.</li>
+      <li>Traducir un texto sin citarlo.</li>
+      <li>Entregar como propio un texto hecho por IA.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="sec t-red" id="etica" aria-labelledby="h7s">
+  <header class="sec-head"><span class="sec-num">7</span><h2 id="h7s">Ética e IA</h2><p>Protege a los niños de tu grupo y a tu escuela de práctica.</p></header>
+  <div class="box">
+    <p class="sub" style="margin:0">Con los niños</p>
+    <ul class="bul">
+      <li>Consentimiento de padres o tutores.</li>
+      <li>Autorización de la escuela de práctica.</li>
+      <li>Códigos en vez de nombres: A01, A02…</li>
+      <li>Fotos sin rostros o con permiso.</li>
+    </ul>
+    <p class="note">Antes: «Juan, de 3ºB de la escuela Benito Juárez, no quiso leer». Después: «A07 no quiso leer».</p>
+  </div>
+  <p class="sub">Semáforo de uso de la IA</p>
+  <div class="sem">
+    <div class="g"><strong>Verde</strong><span>Lluvia de ideas, explicar conceptos, sugerir palabras clave, revisar la claridad de tu texto, ordenar y graficar datos anonimizados.</span></div>
+    <div class="y"><strong>Amarillo</strong><span>Con verificación: resumir un artículo comparando con el original, proponer categorías que tú validas, sugerir una estructura.</span></div>
+    <div class="r"><strong>Rojo</strong><span>Redactar tu análisis o reflexión, tomar referencias sin verificarlas, subir datos personales, entregar texto de IA como propio.</span></div>
+  </div>
+  <p class="note">Si tu Normal permite usar IA, el uso se declara. APA tiene una <a href="https://apastyle.apa.org/blog/cite-generative-ai-references" target="_blank" rel="noopener">guía para citar herramientas de IA generativa</a> (actualizada en septiembre de 2025). Pregunta a tu asesor qué permite tu Normal.</p>
+</section>
+
+<!-- 8 -->
+<section class="sec t-red" id="prompts" aria-labelledby="h8s">
+  <header class="sec-head"><span class="sec-num">8</span><h2 id="h8s">Pedirle cosas a la IA</h2><p>Un buen prompt tiene cinco piezas. La primera respuesta es un borrador.</p></header>
+
+  <div class="tool" id="tool-prompt">
+    <h3>Arma tu prompt</h3>
+    <p class="note">Viene lleno con un ejemplo. Cámbialo por una tarea real de tu tesis.</p>
+    <div class="field"><label for="f-ctx">Contexto</label><small>¿Quién soy y en qué estoy?</small><textarea id="f-ctx" rows="2">Soy normalista de 7º semestre y hago un informe de prácticas en 3ºB.</textarea></div>
+    <div class="field"><label for="f-task">Tarea</label><small>¿Qué necesito? Empieza con un verbo.</small><textarea id="f-task" rows="2">Propón palabras clave y cadenas de búsqueda para mi pregunta.</textarea></div>
+    <div class="field"><label for="f-in">Insumo</label><small>¿Con qué trabaja? Tu pregunta, un PDF o una tabla.</small><textarea id="f-in" rows="2">Mi pregunta es: ¿cómo influye la lectura en voz alta diaria en la comprensión inferencial de 3ºB?</textarea></div>
+    <div class="field"><label for="f-fmt">Formato</label><small>¿Cómo lo quiero?</small><textarea id="f-fmt" rows="2">Dame 6 palabras clave en español e inglés y 3 cadenas para Redalyc y Google Académico, en una tabla.</textarea></div>
+    <div class="field"><label for="f-lim">Límites</label><small>¿Qué debe evitar?</small><textarea id="f-lim" rows="2">No me des referencias, solo términos de búsqueda. Si no sabes algo, dilo.</textarea></div>
+    <div class="out"><div class="out-head"><span>Tu prompt</span><button type="button" class="copy" data-copy="prompt-out">Copiar</button></div><pre id="prompt-out"></pre></div>
+    <ul class="checks" id="prompt-checks" aria-live="polite"></ul>
+  </div>
+
+  <p class="sub">Trucos</p>
+  <ul class="bul">
+    <li><b>Que pregunte primero:</b> «Antes de responder, hazme 3 preguntas que necesites para ayudarme mejor.»</li>
+    <li><b>Itera:</b> corrige con «más corto», «solo para preescolar» o «con el lenguaje del Plan 2022».</li>
+    <li><b>Pide la fuente de cada afirmación</b> y abre el enlace.</li>
+    <li><b>Que critique, no que escriba:</b> «Señala qué afirmaciones de mi párrafo no tienen evidencia. No lo reescribas.»</li>
+    <li><b>Un chat por tarea,</b> y un Proyecto para guardar el contexto de tu tesis.</li>
+  </ul>
+
+  <p class="sub">Banco de prompts · cambia lo que está entre corchetes</p>
+  <div class="prompts" id="banco"></div>
+  <p class="note">En Claude, los artefactos (como la gráfica o el quiz) están en el plan gratuito, pero hay que activar la ejecución de código y creación de archivos en Configuración &gt; Capacidades. Para usar Consensus tienes que conectarlo en tu propia cuenta; sus resultados salen casi todos en inglés.</p>
+</section>
+
+<!-- 9 -->
+<section class="sec t-red" id="pasos" aria-labelledby="h9s">
+  <header class="sec-head"><span class="sec-num">9</span><h2 id="h9s">Mis próximos pasos</h2><p>Tres pasos con fecha. Se guardan solo en este celular o navegador.</p></header>
+  <div class="tool">
+    <div class="plan-row"><div class="field"><label for="d1">Fecha</label><input type="date" id="d1"></div><div class="field"><label for="s1">Paso 1</label><input id="s1" placeholder="Buscar 3 fuentes más con mi cadena en Redalyc y llenar la matriz"></div></div>
+    <div class="plan-row"><div class="field"><label for="d2">Fecha</label><input type="date" id="d2"></div><div class="field"><label for="s2">Paso 2</label><input id="s2" placeholder="Reescribir un párrafo con la estructura de cuatro pasos"></div></div>
+    <div class="plan-row"><div class="field"><label for="d3">Fecha</label><input type="date" id="d3"></div><div class="field"><label for="s3">Paso 3</label><input id="s3" placeholder="Preguntar a mi asesor qué permite la Normal sobre la IA"></div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:.5rem;align-items:center"><button type="button" class="copy" data-copy-plan>Copiar mis pasos</button><span class="saved" id="saved"></span></div>
+  </div>
+  <div class="box">
+    <p class="sub" style="margin:0">Pregúntale a tu asesor</p>
+    <ul class="bul">
+      <li>Qué permite tu Normal sobre el uso de IA en la titulación y cómo se declara.</li>
+      <li>Qué formato de consentimiento usan para padres o tutores.</li>
+      <li>Si tu Normal tiene acceso a Scopus o Web of Science por CONRICYT.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+<footer class="foot">
+  <p>La IA les ahorra tiempo; la voz de su tesis es suya.</p>
+  <p>Taller de Tesis · Fuentes, escritura e IA · 10 de octubre de 2026</p>
+</footer>
+</div>
+
+<script>
+/* ---------- Banco de prompts ---------- */
+const BANCO = [
+ ['Delimitar la pregunta','Soy normalista de 7º semestre. Mi tema es [tema] y mi grupo de práctica es [grado y grupo]. Antes de proponerme nada, hazme 5 preguntas para delimitar mi pregunta de investigación.'],
+ ['Palabras clave','Mi pregunta es: [pregunta]. Dame 6 palabras clave en español e inglés y 3 cadenas de búsqueda con AND y OR para Redalyc y Google Académico, en una tabla. No me des referencias.'],
+ ['Buscar con enlaces','Busca 5 artículos de los últimos 10 años en Redalyc, SciELO o Dialnet sobre [tema] en educación primaria. Dame título, autores, año, revista y enlace. Si no encuentras algo, dilo; no inventes.'],
+ ['Buscar con Consensus','Usa Consensus para buscar estudios sobre [tema] en educación primaria. Dame título, año, revista y enlace de cada uno, e indica cuáles están en español.'],
+ ['Leer un artículo','Con base solo en este PDF, llena una tabla con: referencia APA 7, tipo y método, idea clave, una cita útil con página y cómo se relaciona con mi pregunta: [pregunta].'],
+ ['Explicar un concepto','Explícame qué es [concepto] con un ejemplo de [grado]. Dime qué autores suelen trabajarlo para que yo los busque y verifique.'],
+ ['Revisar un párrafo','Aquí está un párrafo de mi marco teórico. Señala qué afirmaciones no tienen evidencia y dónde falta mi interpretación. No lo reescribas.'],
+ ['Revisar coherencia','Esta es una fila de mi matriz de congruencia: [pregunta, objetivo, enfoque, instrumento]. ¿El instrumento responde la pregunta? Dame 3 observaciones concretas.'],
+ ['Datos cuantitativos','Te adjunto una tabla anonimizada con puntajes antes y después de [número] alumnos. Calcula el promedio de cada momento, la diferencia por alumno y cuántos mejoraron. Luego haz un artefacto con una gráfica de barras interactiva que compare antes y después.'],
+ ['Datos cualitativos','Estos son [número] fragmentos anonimizados de mi diario de campo. Propón categorías preliminares en una tabla con: categoría, qué significa, un fragmento de ejemplo y cuántas veces aparece. Yo las validaré.'],
+ ['Material para tu práctica','Haz un artefacto con un quiz de 5 preguntas sobre [tema] para alumnos de [grado], con retroalimentación en cada respuesta.']
+];
+document.getElementById('banco').innerHTML = BANCO.map((p,i) =>
+  `<details><summary>${p[0]}</summary><div class="pbody"><div class="out"><div class="out-head"><span>Prompt</span><button type="button" class="copy" data-copy="bp${i}">Copiar</button></div><pre id="bp${i}">${p[1]}</pre></div></div></details>`).join('');
+
+/* ---------- Cadena de búsqueda ---------- */
+function term(t){ t = t.trim(); if (!t) return ''; if (/^".*"$/.test(t)) return t; return /\s/.test(t) ? `"${t}"` : t; }
+function buildCadena(){
+  const groups = ['c1','c2','c3'].map(id => document.getElementById(id).value.split(',').map(term).filter(Boolean)).filter(g => g.length);
+  const out = groups.map(g => g.length > 1 ? `(${g.join(' OR ')})` : g[0]).join(' AND ');
+  document.getElementById('cadena-out').textContent = out || 'Escribe al menos un concepto.';
+}
+['c1','c2','c3'].forEach(id => document.getElementById(id).addEventListener('input', buildCadena));
+buildCadena();
+
+/* ---------- Prompt de cinco piezas ---------- */
+const PIEZAS = [['f-ctx','Contexto'],['f-task','Tarea'],['f-in','Insumo'],['f-fmt','Formato'],['f-lim','Límites']];
+function buildPrompt(){
+  const vals = PIEZAS.map(([id]) => document.getElementById(id).value.trim());
+  document.getElementById('prompt-out').textContent = vals.filter(Boolean).join(' ') || 'Llena al menos una pieza.';
+  const items = PIEZAS.map(([id,l],i) => ({l:`${l}`, ok: !!vals[i]}));
+  document.getElementById('prompt-checks').innerHTML =
+    items.map(x => `<li class="${x.ok ? 'ok' : 'no'}"><span class="mark" aria-hidden="true">${x.ok ? '✓' : ''}</span><span>${x.l}${x.ok ? '' : ': falta'}</span></li>`).join('') +
+    `<li class="no"><span class="mark" aria-hidden="true"></span><span>Revísalo con tu pareja: ¿pide algo que se pueda verificar?, ¿evita datos personales?</span></li>`;
+}
+PIEZAS.forEach(([id]) => document.getElementById(id).addEventListener('input', buildPrompt));
+buildPrompt();
+
+/* ---------- Mis próximos pasos (solo en este navegador) ---------- */
+const PKEY = 'guia-taller-tesis-pasos';
+const PIDS = ['d1','s1','d2','s2','d3','s3'];
+try { const saved = JSON.parse(localStorage.getItem(PKEY) || '{}'); PIDS.forEach(id => { if (saved[id]) document.getElementById(id).value = saved[id]; }); } catch (e) {}
+let tSave;
+PIDS.forEach(id => document.getElementById(id).addEventListener('input', () => {
+  clearTimeout(tSave);
+  tSave = setTimeout(() => {
+    const data = {}; PIDS.forEach(k => data[k] = document.getElementById(k).value);
+    try { localStorage.setItem(PKEY, JSON.stringify(data)); document.getElementById('saved').textContent = 'Guardado en este navegador.'; }
+    catch (e) { document.getElementById('saved').textContent = 'Este navegador no deja guardar. Copia tus pasos o anótalos en tu cuaderno.'; }
+  }, 400);
+}));
+function planText(){
+  return [1,2,3].map(n => {
+    const d = document.getElementById('d'+n).value, s = document.getElementById('s'+n).value.trim();
+    if (!s) return '';
+    let f = '';
+    if (d){ const [y,m,dd] = d.split('-'); f = `${dd}/${m}/${y}: `; }
+    return `${n}. ${f}${s}`;
+  }).filter(Boolean).join('\n') || 'Todavía no escribes tus pasos.';
+}
+
+/* ---------- Copiar ---------- */
+function flash(btn, msg, ms){ const old = btn.dataset.label || btn.textContent; btn.dataset.label = old; btn.textContent = msg; setTimeout(() => { btn.textContent = old; }, ms); }
+function selectNode(el){ const r = document.createRange(); r.selectNodeContents(el); const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-copy],[data-copy-plan]');
+  if (!btn) return;
+  const isPlan = btn.hasAttribute('data-copy-plan');
+  const src = isPlan ? null : document.getElementById(btn.dataset.copy);
+  const text = isPlan ? planText() : src.textContent;
+  const fail = () => {
+    if (src){ selectNode(src); flash(btn, 'Seleccionado: cópialo', 3000); }
+    else { document.getElementById('saved').textContent = text; flash(btn, 'Cópialo de abajo', 3000); }
+  };
+  try { navigator.clipboard.writeText(text).then(() => flash(btn, 'Copiado', 1600), fail); } catch (err) { fail(); }
+});
+</script>
+
+</body>
+</html>
